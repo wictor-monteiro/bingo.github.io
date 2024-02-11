@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bingo 3x3</title>
+<style>
+  .bingo-card {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+    margin: 20px auto;
+    max-width: 300px;
+  }
+
+  .bingo-cell {
+    border: 1px solid black;
+    padding: 10px;
+    text-align: center;
+  }
+
+  #save-button {
+    display: block;
+    margin: 20px auto;
+  }
+</style>
+</head>
+<body>
+
+<div id="bingo-card" class="bingo-card"></div>
+<button id="save-button">Salvar Cartela</button>
+
+<script>
+  // Lista de URLs de imagens
+  const imageUrls = [
+    "https://via.placeholder.com/150?text=Image1",
+    "https://via.placeholder.com/150?text=Image2",
+    "https://via.placeholder.com/150?text=Image3",
+    "https://via.placeholder.com/150?text=Image4",
+    "https://via.placeholder.com/150?text=Image5",
+    "https://via.placeholder.com/150?text=Image6",
+    "https://via.placeholder.com/150?text=Image7",
+    "https://via.placeholder.com/150?text=Image8",
+    "https://via.placeholder.com/150?text=Image9"
+  ];
+
+  // Função para embaralhar as imagens
+  function shuffleImages() {
+    const shuffledImages = [...imageUrls].sort(() => Math.random() - 0.5);
+    shuffledImages.splice(4, 0, ""); // Espaço vazio ao centro
+    return shuffledImages;
+  }
+
+  // Função para criar a cartela de bingo
+  function createBingoCard() {
+    const bingoCard = document.getElementById("bingo-card");
+    bingoCard.innerHTML = ""; // Limpa o conteúdo atual
+
+    const shuffledImages = shuffleImages();
+
+    shuffledImages.forEach(imageUrl => {
+      const cell = document.createElement("div");
+      cell.classList.add("bingo-cell");
+      if (imageUrl) {
+        const image = document.createElement("img");
+        image.src = imageUrl;
+        cell.appendChild(image);
+      }
+      bingoCard.appendChild(cell);
+    });
+  }
+
+  // Função para salvar a cartela como imagem
+  function saveBingoCard() {
+    const bingoCard = document.getElementById("bingo-card");
+    html2canvas(bingoCard).then(canvas => {
+      const image = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.href = image;
+      link.download = "bingo_card.png";
+      link.click();
+    });
+  }
+
+  // Event listener para o botão "Salvar Cartela"
+  document.getElementById("save-button").addEventListener("click", saveBingoCard);
+
+  // Cria a cartela de bingo inicial
+  createBingoCard();
+</script>
+
+<!-- Biblioteca html2canvas para salvar a cartela como imagem -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+
+</body>
+</html>
+
+
